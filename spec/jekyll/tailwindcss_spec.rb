@@ -1,12 +1,68 @@
 # frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe Jekyll::Tailwindcss do
   it "has a version number" do
-    expect(Jekyll::Tailwindcss::VERSION).not_to be nil
+    expect(Tailwindcss::VERSION).not_to be nil
+  end
+  let(:configuration) { Jekyll::Configuration::DEFAULTS }
+  let(:converter) do
+    Jekyll::Converters::CoffeeScript.new(configuration)
+  end
+  let(:coffeescript_content) do
+    <<~COFFEESCRIPT
+      # Functions:
+      square = (x) -> x * x
+
+      # Arrays:
+      list = [1, 2, 3, 4, 5]
+
+      # Objects:
+      math =
+        root:   Math.sqrt
+        square: square
+        cube:   (x) -> x * square x
+    COFFEESCRIPT
+  end
+  let(:js_content) do
+    <<~JS
+      (function() {
+        var list, math, square;
+
+        square = function(x) {
+          return x * x;
+        };
+
+        list = [1, 2, 3, 4, 5];
+
+        math = {
+          root: Math.sqrt,
+          square: square,
+          cube: function(x) {
+            return x * square(x);
+          }
+        };
+
+      }).call(this);
+    JS
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  context "matching file extensions" do
+    it "matches .coffee files" do
+      expect(converter.matches(".coffee")).to be(true)
+    end
+  end
+
+  context "determining the output file extension" do
+    it "always outputs the .js file extension" do
+      expect(converter.output_ext(".always-js-dont-matter")).to eql(".js")
+    end
+  end
+
+  context "converting CoffeeScript" do
+    it "produces JS" do
+      expect(converter.convert(coffeescript_content)).to eql(js_content)
+    end
   end
 end

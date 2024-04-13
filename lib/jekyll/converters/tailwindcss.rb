@@ -1,11 +1,11 @@
 module Jekyll
   module Converters
-    class Tailwindcss< Converter
+    class Tailwindcss < Converter
       safe true
       priority :low
 
       def matches(ext)
-        ext =~ /^\.tailwindcss$/i
+        ext =~ /^\.tailwind(css)?$/i
       end
 
       def output_ext(ext)
@@ -13,7 +13,10 @@ module Jekyll
       end
 
       def convert(content)
-        content
+        dev_mode = Jekyll.env == "development"
+        Jekyll.logger.info "Jekyll Tailwind:", "Generating #{!dev_mode && "minified "}CSS"
+
+        system(*Tailwindcss::Commands.compile_command(debug: dev_mode))
       end
     end
   end

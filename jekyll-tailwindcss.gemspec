@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative "lib/jekyll-tailwindcss/version"
+require_relative "lib/tailwindcss/version"
 
 Gem::Specification.new do |spec|
   spec.name = "jekyll-tailwindcss"
-  spec.version = Jekyll::Tailwindcss::VERSION
+  spec.version = Tailwindcss::VERSION
   spec.authors = ["Mike Vormwald"]
   spec.email = ["mvormwald@gmail.com"]
 
