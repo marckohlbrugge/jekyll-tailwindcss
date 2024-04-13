@@ -5,7 +5,6 @@ require "tailwindcss/commands"
 
 begin
   command = [Tailwindcss::Commands.executable, *ARGV]
-  puts command.inspect
   if Gem.win_platform?
     # use system rather than exec as exec inexplicably fails to find the executable on Windows
     # see related https://github.com/rubys/sprockets-esbuild/pull/4

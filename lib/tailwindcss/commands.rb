@@ -65,7 +65,7 @@ module Tailwindcss
 
             TODO If you're still seeing this message after taking those steps, try running
             `bundle config` and ensure `force_ruby_platform` isn't set to `true`. See
-            https://github.com/rails/tailwindcss-rails#check-bundle_force_ruby_platform
+            https://github.com/vormwald/jekyll-tailwindcss#check-bundle_force_ruby_platform
             for more details.
           MESSAGE
         end
@@ -76,14 +76,14 @@ module Tailwindcss
       def compile_command(debug: false, **kwargs)
         command = [
           executable(**kwargs),
-          "-i", Jekyll.env.tailwindcss_input || "_input.css",
-          "-c", Jekyll.env.tailwindcss_config || "tailwind.config.js"
+          "-i", "./_input.css",
+          "-c", "./tailwind.config.js"
         ]
 
         command << "--minify" unless debug
 
-        # postcss_path = Rails.root.join("config/postcss.config.js")
-        # command += ["--postcss", postcss_path.to_s] if File.exist?(postcss_path)
+        postcss_path = "postcss.config.js"
+        command += ["--postcss", postcss_path] if File.exist?(postcss_path)
 
         command
       end

@@ -5,7 +5,7 @@ module Jekyll
       priority :low
 
       def matches(ext)
-        ext =~ /^\.tailwind(css)?$/i
+        ext =~ /^\.tailwind$/i
       end
 
       def output_ext(ext)
@@ -14,9 +14,11 @@ module Jekyll
 
       def convert(content)
         dev_mode = Jekyll.env == "development"
-        Jekyll.logger.info "Jekyll Tailwind:", "Generating #{!dev_mode && "minified "}CSS"
+        Jekyll.logger.info "Jekyll Tailwind:", "Generating #{dev_mode ? "" : "minified "}CSS"
 
-        system(*Tailwindcss::Commands.compile_command(debug: dev_mode))
+        compile_command = ::Tailwindcss::Commands.compile_command(debug: dev_mode).join(" ")
+
+        `#{compile_command}`
       end
     end
   end
